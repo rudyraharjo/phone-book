@@ -10,8 +10,7 @@
         <span>{{MsgError}}</span>
         <v-btn color="white" flat @click="SnackbarError = false">Close</v-btn>
     </v-snackbar>
-
-    <h1 class="subheading grey--text">Phone Number</h1>
+    
     <v-container fluid class="my-5">
 
       <v-layout row justify-start class="mb-3">
@@ -23,12 +22,6 @@
           <span>Sort by Email</span>
         </v-tooltip>
         <v-spacer></v-spacer>
-        
-        <!-- <div class="right">
-
-          <ModalContact ref="ModalDialog" />
-
-        </div> -->
 
         <v-dialog v-model="dialog" persistent max-width="500px">
           <v-btn slot="activator" color="success" dark class="mb-2">Add Phone Number</v-btn>
@@ -66,10 +59,8 @@
           </v-card>
         </v-dialog>
 
-
       </v-layout>
-
-      <div v-if="phonenumber !== null">
+      
         <v-card flat v-for="item in phonenumber" :key="item.id">
           <v-layout row wrap class="pa-3 project">
             <v-flex xs12 md6>
@@ -93,14 +84,6 @@
           </v-layout>
           <v-divider></v-divider>
         </v-card>
-      </div>
-      <div v-else>
-        <v-layout row wrap class="pa-3 project">
-          <v-flex xs12>
-            <div class="caption grey--text text-md-center"><strong> <h2>No Data</h2> </strong></div>
-          </v-flex>
-        </v-layout>
-      </div>
 
     </v-container>
   </div>
@@ -108,11 +91,7 @@
 
 <script>
 
-  //import ModalContact from '../../components/ModalContact'
-  //import {eventBus} from '../../Event' 
-
   export default {
-    //components: {ModalContact},
     data(){
       return {
         search:'',
@@ -146,7 +125,8 @@
         this.$store.getters.phoneNumber.sort((a,b) => a[prop] < b[prop] ? -1 : 1)
       },
       loadPhoneNumber(){
-        this.$store.dispatch('getPhoneNumber')
+        //console.log('loadPhoneNumber')
+       //this.$store.dispatch('getPhoneNumber')
       },
       close () {
           this.dialog = false
@@ -174,7 +154,7 @@
                   this.close()
                   this.SnackbarSuccess = true
                   this.MsgSuccess = res.data.messages
-                  Object.assign(this.phonenumber[this.editedIndex], this.editedItem)
+                  //Object.assign(this.phonenumber[this.editedIndex], this.editedItem)
                 }).catch(err=>{
                   //console.log(err) // eslint-disable-line
                   this.close()
@@ -190,6 +170,7 @@
           } else {
 
               if (this.$refs.form.validate()) {
+                  
                   this.loading = true
                   this.$store.dispatch('PhonenumberStore', {
                       name: this.editedItem.name,
@@ -240,7 +221,9 @@
       },
     },
     created () {
-      this.loadPhoneNumber()
+      //console.log("created")
+      //this.loadPhoneNumber()
+      this.$store.dispatch('getPhoneNumber')
     },
     mounted(){
       //console.log('mounted') // eslint-disable-line
@@ -251,11 +234,6 @@
       },
       formTitle () {
         return this.editedIndex === -1 ? 'Add Phone Number' : 'Edit Phone Number'
-      }
-    },
-    watch:{
-      loadPhoneNumber(){
-        this.loadPhoneNumber();
       }
     }
   }

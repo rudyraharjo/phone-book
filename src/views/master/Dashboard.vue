@@ -1,15 +1,26 @@
 <template>
   <div class="dashboard">
-    <h1 class="subheading grey--text">Dashboard</h1>
-    <v-container fluid class="my-5">
+    
+    <v-responsive>
+      <v-container fill-height>
+        <v-layout align-center>
+          <v-flex>
+            <h3 class="display-3">Welcome to the site</h3>
 
-      <v-layout row wrap>
+            <span class="subheading">Lorem ipsum dolor sit amet, pri veniam forensibus id. Vis maluisset molestiae id, ad semper lobortis cum. At impetus detraxit incorrupte usu, repudiare assueverit ex eum, ne nam essent vocent admodum.</span>
 
-        <v-flex xs12>
-                  </v-flex>
+            <v-divider class="my-3"></v-divider>
 
-      </v-layout>
-    </v-container>
+            <div class="title mb-3">Check out our newest features!</div>
+
+            <v-btn class="mx-0" color="primary" large>
+              See more
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-responsive>
+
   </div>
 </template>
 

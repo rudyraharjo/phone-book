@@ -1,10 +1,12 @@
 <template>
-  <v-app class="grey lighten-4">
-    <Navbar />
-    <v-content class="mx-4 mb-4">
+  
+  <v-app id="inspire">
+    <Navbar v-if="IsLoggin" />
+    <v-content>
       <router-view></router-view>
     </v-content>
   </v-app>
+  
 </template>
 
 <script>
@@ -19,6 +21,11 @@ export default {
     return {
       //
     }
+  },
+  computed:{
+      IsLoggin(){
+          return this.$store.getters.IsLoggin
+      }
   }
 }
 </script>

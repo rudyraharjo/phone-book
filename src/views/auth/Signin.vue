@@ -1,13 +1,13 @@
 <template>
     
-    <div class="dashboard">
+    <div class="signin">
         
         <v-snackbar v-model="snackbarMsg" :timeout="6000" top right color="error">
             <span>{{MsgValidation}}</span>
             <v-btn color="white" flat @click="snackbarMsg = false">Close</v-btn>
         </v-snackbar>
         
-        <v-container fluid fill-height>
+        <v-container fluid>
             <v-layout align-center justify-center>
                 <v-flex xs12 sm8 md4>
                     <v-card class="elevation-12">

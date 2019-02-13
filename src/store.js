@@ -11,10 +11,6 @@ export default new Vuex.Store({
     title:'Test State',
     Storagetoken: JSON.parse(localStorage.getItem('StorageToken')) || null,
     phoneNumber: null,
-    todos: [
-      { id: 1, text: 'text 1', done: true },
-      { id: 2, text: 'text 2', done: false }
-    ]
   },
   getters:{
     IsLoggin(state){
@@ -25,23 +21,29 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    getTokenStorage(state, token) {
+    MUT_GETTOKENSTORAGE(state, token) {
       state.Storagetoken = token
     },
-    destroyToken(state) {
+    MUT_DESTROYTOKEN(state) {
       state.Storagetoken = null
     },
-    getPhoneNumber(state, payload){
-      //console.log(payload.length) // eslint-disable-line
-      if(state.phoneNumber !== null){
-        state.phoneNumber.push(payload)
-      }else {
-        state.phoneNumber = payload
-      }
+    // MUTATIONS PHONE NUMBER
+    MUT_GETPHONENUMBER(state, payload){
+      state.phoneNumber = payload
     },
-    deletePhoneNumber(state, payload){
+    MUT_ADDPHONENUMBER(state, payload){
+      state.phoneNumber.push(payload)
+    },
+    MUT_UPDATEPHONENUMBER(state, payload){
+      const idx = state.phoneNumber.map(p => p.id).indexOf(payload.id)
+      //console.log(idx, payload.id) // eslint-disable-line
+      state.phoneNumber.splice(idx, 1, payload)
+    },
+    MUT_DELETEPHONENUMBER(state, payload){
+      console.log(payload) // eslint-disable-line
       state.phoneNumber.splice(payload, 1)
     },
+    // END MUTATIONS PHONE NUMBER
   },
   actions: {
     retrieveToken(context, credentials) {
@@ -61,7 +63,7 @@ export default new Vuex.Store({
               
               localStorage.setItem('StorageToken', JSON.stringify(data_token))
               
-              context.commit('getTokenStorage', data_token)
+              context.commit('MUT_GETTOKENSTORAGE', data_token)
 
               resolve(response) 
             } else {
@@ -114,12 +116,12 @@ export default new Vuex.Store({
           axios.post('/auth/logout')
             .then(response => {
               localStorage.removeItem('StorageToken')
-              context.commit('destroyToken')
+              context.commit('MUT_DESTROYTOKEN')
               resolve(response)
             })
             .catch(error => {
               localStorage.removeItem('StorageToken')
-              context.commit('destroyToken')
+              context.commit('MUT_DESTROYTOKEN')
               reject(error)
             })
         });
@@ -138,7 +140,7 @@ export default new Vuex.Store({
         return new Promise((resolve, reject) => {
           axios.get('/phonenumber/all')
             .then(response => {
-              context.commit('getPhoneNumber', response.data)
+              context.commit('MUT_GETPHONENUMBER', response.data)
               //resolve(response)
             })
             .catch(error => {
@@ -167,7 +169,7 @@ export default new Vuex.Store({
           .then(response => {
             if(response.data.success){
               resolve(response) 
-              context.commit('getPhoneNumber', response.data.data)
+              context.commit('MUT_ADDPHONENUMBER', response.data.data)
             } else {
               reject(response) 
             }
@@ -202,10 +204,10 @@ export default new Vuex.Store({
           .then(response => {
             if(response.data.success){
               resolve(response) 
+              context.commit('MUT_UPDATEPHONENUMBER', response.data.data)
             } else {
               reject(response) 
             }
-              
           })
           .catch(error => {
             reject(error)
@@ -233,7 +235,7 @@ export default new Vuex.Store({
           .then(response => {
             if(response.data.success){
               resolve(response) 
-              context.commit('deletePhoneNumber', credentials.index)
+              context.commit('MUT_DELETEPHONENUMBER', credentials.index)
             } else {
               reject(response) 
             }
